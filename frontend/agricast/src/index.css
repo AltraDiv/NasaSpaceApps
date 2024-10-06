@@ -3,3 +3,11 @@
 @tailwind components;
 @tailwind utilities;
 /* src/index.css or directly in Data.tsx */
+
+.custom-icon {
+  background-color: red; /* Change color as needed */
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  border: 2px solid white; /* Optional */
+}

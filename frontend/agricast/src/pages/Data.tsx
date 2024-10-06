@@ -5,12 +5,15 @@ import L from 'leaflet';
 const Data: React.FC = () => {
   const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
   const [currentDate] = useState<string>(new Date().toLocaleDateString());
+  const [showCoords, setShowCoords] = useState<boolean>(false); // State to control textbox visibility
 
-  const MapClickHandler = () => {
+  // Custom hook for handling map click events
+  const MapClickHandler: React.FC = () => {
     useMapEvents({
       click: (event) => {
         const { lat, lng } = event.latlng;
         setCoordinates({ lat, lng });
+        setShowCoords(true); // Show the textbox when coordinates are clicked
       },
     });
     return null;
@@ -23,7 +26,7 @@ const Data: React.FC = () => {
       <MapContainer 
         center={[43.7, -79.42]} 
         zoom={12} 
-        className="w-1/2 h-1/2" // Adjusted size for a smaller map
+        className="w-1/2 h-1/2"
       >
         <TileLayer
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -41,6 +44,25 @@ const Data: React.FC = () => {
           </Marker>
         )}
       </MapContainer>
+      
+      {/* Conditional rendering of the textbox for coordinates */}
+      {showCoords && coordinates && (
+        <div className="mt-4">
+          <label className="block mb-2 text-lg font-semibold">Coordinates:</label>
+          <input
+            type="text"
+            value={`Latitude: ${coordinates.lat}`} // Correctly format to show both
+            readOnly
+            className="p-2 border border-gray-300 rounded"
+          />
+          <input
+            type="text"
+            value={`Longitude: ${coordinates.lng}`} // Correctly format to show both
+            readOnly
+            className="p-2 border border-gray-300 rounded"
+          />
+        </div>
+      )}
     </div>
   );
 };
