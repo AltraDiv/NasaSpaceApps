@@ -3,6 +3,7 @@ import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta  # For handling future dates
 from flask import Flask, request, jsonify, send_file
+from flask_cors import CORS
 from pyhdf.SD import SD, SDC  # For HDF file handling
 import netCDF4 as nc  # For NetCDF file handling
 import glob
@@ -14,6 +15,8 @@ from sklearn.preprocessing import StandardScaler
 from torch.cuda.amp import GradScaler, autocast  # For mixed precision training
 
 app = Flask(__name__)
+CORS(app)  # This will enable CORS for all routes
+
 
 # Constants for MODIS Sinusoidal projection
 EARTH_RADIUS = 6371007.181  # radius of Earth in meters
@@ -63,7 +66,9 @@ def predict():
     data = request.json
     date_input = data.get('date')  # e.g., "2023091"
     data_type = data.get('data_type')  # e.g., "temp", "rain", "groundwater"
-
+    date_input = f"2023{date_input[4:]}" 
+    date_input = date_input.replace("-", "")  # Removes all dashes
+    print(f"Received request for {data_type} data on {date_input}.")
     # Define target variables and model paths
     data_info = {
         'temp': {
@@ -227,7 +232,8 @@ def predict():
     })
 
     # Save predictions to CSV
-    predictions_file = f'predictions_{data_type}_{date_input}.csv'
+    date_input = f"2025{date_input[4:]}"
+    predictions_file = f'./predictions/predictions_{data_type}_{date_input}.csv'
     predictions_df.to_csv(predictions_file, index=False)
 
     return send_file(predictions_file, as_attachment=True)
