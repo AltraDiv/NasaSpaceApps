@@ -35,7 +35,7 @@ data_type = input("Enter the data type (temp, rain, groundwater): ").strip().low
 # Define target variables and model paths
 data_info = {
     'temp': {
-        'target': 'Temperature (K)',
+        'target': 'Temperature',
         'model_path': f'./models/weather_predictor_temp_model_{date_input}.pth',
         'dataset_name': 'LST_Day_1km'  # Replace with actual dataset name if different
     },
@@ -45,7 +45,7 @@ data_info = {
         'dataset_name': 'precipitation'  # Replace with actual dataset name if different
     },
     'groundwater': {
-        'target': 'Groundwater Value',
+        'target': 'Groundwater',
         'model_path': f'./models/weather_predictor_groundwater_model_{date_input}.pth',
         'dataset_name': 'Optical_Depth_047'  # Replace with actual dataset name if different
     }
@@ -61,9 +61,9 @@ dataset_name = data_info[data_type]['dataset_name']
 
 # File paths based on the input date
 file_paths = {
-    'temp': f'temp/MOD11A1.A{date_input}.*.hdf',
-    'rain': f'rain/3B-DAY.MS.MRG.3IMERG.{date_input}-S000000-E235959.V07B.nc4',
-    'groundwater': f'groundwater/MCD19A2.A{date_input}.*.hdf'
+    'temp': f'temp/*.A{date_input}.*.hdf',
+    'rain': f'rain/*.{date_input}*.nc4',
+    'groundwater': f'groundwater/*.A{date_input}.*.hdf'
 }
 
 # Initialize DataFrame for future predictions
@@ -103,7 +103,7 @@ if data_type == "temp":
         lst_df = pd.DataFrame({
             'Latitude': lat_flat,
             'Longitude': lon_flat,
-            'Temperature (K)': temp_flat
+            'Temperature': temp_flat
         })
 
         print("Land Surface Temperature Data:")
@@ -181,7 +181,7 @@ elif data_type == "groundwater":
             groundwater_df = pd.DataFrame({
                 'Latitude': gw_lat_flat,
                 'Longitude': gw_lon_flat,
-                'Groundwater Value': gw_flat
+                'Groundwater': gw_flat
             })
 
             print("Groundwater Data:")
@@ -308,6 +308,6 @@ future_df = pd.DataFrame({
 })
 
 # Save the predictions to a CSV file
-output_file = f'predicted_{data_type}_precipitation_{future_date.strftime("%Y%m%d")}.csv'
+output_file = f'./predictions/predicted_{data_type}_{future_date.strftime("%Y%m%d")}.csv'
 future_df.to_csv(output_file, index=False)
 print(f"Predictions saved to '{output_file}'.")
