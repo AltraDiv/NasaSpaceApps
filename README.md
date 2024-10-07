@@ -27,9 +27,7 @@ and select their data of interest, and Agricast will output a map of the GTA wit
 on how farmers can prepare their crops.
 
 <img src="content/Capture.PNG" width="900" height="600"/>
-<img src="content/Capture2.PNG" width="600" height="600"/>
-<img src="content/image2.png" width="600" height="600"/>
-<img src="content/image.png" width="600" height="600"/>
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 ## AI TRAINING
@@ -40,6 +38,9 @@ on how farmers can prepare their crops.
 
   If we had more time and much larger resources and space, we would be able to expand this project into one that would be able to help farmers like Farmer John.
 ### Built With
+
+<img src="content/image2.png" width="600" height="600"/>
+<img src="content/image.png" width="600" height="600"/>
 
 - [![React][React.js]][React-url]
 - [![Vite][Vite-logo]][Vite-url]
@@ -93,6 +94,7 @@ The machine learning models are available to be downloaded at:
 ## Usage
 
 <img src="content/weatherpred.png" width="600" height="600"/>
+<img src="content/Capture2.PNG" width="600" height="600"/>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
