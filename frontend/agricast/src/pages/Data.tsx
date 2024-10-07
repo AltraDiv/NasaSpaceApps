@@ -1,161 +1,212 @@
-import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
-import L from 'leaflet';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
+// src/App.tsx
+import React, { useState } from 'react';
 import axios from 'axios';
-import * as Papa from 'papaparse'; // Library to parse CSV
-import CSVMap from './components/csvplot';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Data: React.FC = () => {
-  const [coordinates, setCoordinates] = useState<{ lat: number; lng: number } | null>(null);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-  const [dataType, setDataType] = useState<string>('rain');
-  const [showCoords, setShowCoords] = useState<boolean>(false);
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string | null>(null);
-  const [predictions, setPredictions] = useState<any[]>([]); // State to hold parsed CSV data
+  // State variables for form inputs
+  const [date, setDate] = useState<string>('');
+  const [dataType, setDataType] = useState<string>('temp');
+  
+  // State variables for additional options (optional)
+  const [epochs, setEpochs] = useState<number>(30);
+  const [batchSize, setBatchSize] = useState<number>(32);
+  const [learningRate, setLearningRate] = useState<number>(0.001);
+  const [overwrite, setOverwrite] = useState<boolean>(false);
+  
+  // State variables for handling loading and response
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [responseMessage, setResponseMessage] = useState<string>('');
 
-  const MapClickHandler: React.FC = () => {
-    useMapEvents({
-      click: (event) => {
-        const { lat, lng } = event.latlng;
-        setCoordinates({ lat, lng });
-        setShowCoords(true);
-      },
-    });
-    return null;
-  };
+  // Handler for form submission
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const fetchPredictions = async () => {
-    if (!coordinates || !selectedDate || !dataType) return;
-    setLoading(true);
-    setError(null);
+    // Basic validation
+    if (!date) {
+      toast.error('Please select a date.');
+      return;
+    }
+
+    if (!['temp', 'rain', 'groundwater'].includes(dataType)) {
+      toast.error('Invalid data type selected.');
+      return;
+    }
+
+    setIsLoading(true);
+    setResponseMessage('');
 
     try {
-      // Send request to backend to generate predictions and download CSV
-      await axios.post('http://127.0.0.1:5000/predict', {
-        date: selectedDate.toISOString().split('T')[0],
+      // Format date as per backend expectations
+      // Assuming backend expects 'YYYYMMDD'
+      const formattedDate = date.replace(/-/g, '');
+
+      // Prepare the payload
+      const payload = {
+        date: formattedDate,    // Formatted date
         data_type: dataType,
-        coordinates: coordinates,
-      });
-
-      const trimmedDate = selectedDate.toISOString().split('T')[0].replace(/-/g, '');
-
-      // Fetch the CSV file after the backend processing is done
-      const response = await axios.get(`../../backend/predictions/predictions_${dataType}_${trimmedDate}.csv`, {
-        responseType: 'blob', // Set response type to blob to handle the file
-      });
-
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const csvData = e.target?.result as string;
-
-        // Parse the CSV data
-        Papa.parse(csvData, {
-          header: true,
-          skipEmptyLines: true,
-          complete: (results) => {
-            setPredictions(results.data); // Set parsed CSV data to state
-          },
-        });
+        epochs: epochs,
+        batch_size: batchSize,
+        learning_rate: learningRate,
+        overwrite: overwrite,
       };
-      reader.readAsText(response.data);
 
-      setLoading(false);
-    } catch (err) {
-      setError(err.message);
-      setLoading(false);
+      // Make the POST request to the backend
+      const response = await axios.post('http://localhost:5000/predict', payload, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      // Handle success response
+      if (response.status === 200) {
+        setResponseMessage(response.data.message);
+        toast.success(response.data.message);
+      } else {
+        toast.error('Unexpected response from the server.');
+      }
+    } catch (error: any) {
+      // Handle error response
+      if (error.response && error.response.data && error.response.data.error) {
+        toast.error(`Error: ${error.response.data.error}`);
+      } else if (error.response && error.response.data && error.response.data.message) {
+        toast.info(`Info: ${error.response.data.message}`);
+      } else {
+        toast.error('An error occurred while processing your request.');
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-green-200">
-      <h1 className="text-4xl font-bold mb-4">Data Page</h1>
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8">
+        <h1 className="text-2xl font-bold mb-6 text-center">Weather Predictor</h1>
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Date Input */}
+          <div>
+            <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+              Date:
+            </label>
+            <input
+              type="date"
+              id="date"
+              value={date}
+              onChange={(e) => setDate(e.target.value)}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
 
-      <div className="relative w-full h-1/2 mb-4">
-        <MapContainer center={[43.7, -79.42]} zoom={12} className="w-full h-full">
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-          />
-          <MapClickHandler />
-          {coordinates && (
-            <Marker position={[coordinates.lat, coordinates.lng]} icon={L.divIcon({ className: 'custom-icon' })}>
-              <Popup>
-                <div>
-                  <p>Latitude: {coordinates.lat}</p>
-                  <p>Longitude: {coordinates.lng}</p>
-                </div>
-              </Popup>
-            </Marker>
-          )}
-        </MapContainer>
+          {/* Data Type Selection */}
+          <div>
+            <label htmlFor="dataType" className="block text-sm font-medium text-gray-700">
+              Data Type:
+            </label>
+            <select
+              id="dataType"
+              value={dataType}
+              onChange={(e) => setDataType(e.target.value)}
+              required
+              className="mt-1 block w-full px-3 py-2 border border-gray-300 bg-white rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="temp">Temperature</option>
+              <option value="rain">Precipitation</option>
+              <option value="groundwater">Groundwater</option>
+            </select>
+          </div>
+
+          {/* Additional Options (Optional) */}
+          <fieldset className="border border-gray-300 rounded-md p-4">
+            <legend className="text-sm font-medium text-gray-700">Training Parameters (Optional)</legend>
+            
+            <div className="mt-4 space-y-4">
+              {/* Epochs */}
+              <div>
+                <label htmlFor="epochs" className="block text-sm font-medium text-gray-700">
+                  Epochs:
+                </label>
+                <input
+                  type="number"
+                  id="epochs"
+                  value={epochs}
+                  onChange={(e) => setEpochs(Number(e.target.value))}
+                  min={1}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+
+              {/* Batch Size */}
+              <div>
+                <label htmlFor="batchSize" className="block text-sm font-medium text-gray-700">
+                  Batch Size:
+                </label>
+                <input
+                  type="number"
+                  id="batchSize"
+                  value={batchSize}
+                  onChange={(e) => setBatchSize(Number(e.target.value))}
+                  min={1}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+
+              {/* Learning Rate */}
+              <div>
+                <label htmlFor="learningRate" className="block text-sm font-medium text-gray-700">
+                  Learning Rate:
+                </label>
+                <input
+                  type="number"
+                  id="learningRate"
+                  value={learningRate}
+                  onChange={(e) => setLearningRate(Number(e.target.value))}
+                  step="0.0001"
+                  min={0}
+                  className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"
+                />
+              </div>
+
+              {/* Overwrite Checkbox */}
+              <div className="flex items-center">
+                <input
+                  type="checkbox"
+                  id="overwrite"
+                  checked={overwrite}
+                  onChange={(e) => setOverwrite(e.target.checked)}
+                  className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
+                />
+                <label htmlFor="overwrite" className="ml-2 block text-sm text-gray-700">
+                  Overwrite Existing Model
+                </label>
+              </div>
+            </div>
+          </fieldset>
+
+          {/* Submit Button */}
+          <button
+            type="submit"
+            disabled={isLoading}
+            className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
+              isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+            } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
+          >
+            {isLoading ? 'Processing...' : 'Predict'}
+          </button>
+        </form>
+
+        {/* Response Message */}
+        {responseMessage && (
+          <div className="mt-6 p-4 bg-green-100 border border-green-400 text-green-700 rounded">
+            <p>{responseMessage}</p>
+          </div>
+        )}
       </div>
 
-      {/* Data Type Selection */}
-      <div className="mb-4">
-        <label className="block mb-2 text-lg font-semibold">Select Data Type:</label>
-        <select
-          value={dataType}
-          onChange={(e) => setDataType(e.target.value)}
-          className="p-2 border border-gray-300 rounded"
-        >
-          <option value="rain">Precipitation</option>
-          <option value="groundwater">Groundwater</option>
-          <option value="temp">Temperature</option>
-        </select>
-      </div>
-
-      {/* Date Picker */}
-      <div className="mb-4">
-        <label className="block mb-2 text-lg font-semibold">Select Date (Pick from 2025 April - November):</label>
-        <DatePicker
-          selected={selectedDate}
-          onChange={(date) => setSelectedDate(date)}
-          dateFormat="yyyy/MM/dd"
-          minDate={new Date(2025, 3, 1)} // April 1, 2025
-          maxDate={new Date(2025, 10, 31)} // November 30, 2025
-          className="p-2 border border-gray-300 rounded"
-        />
-      </div>
-
-      <p className="mb-4">Selected Date: {selectedDate?.toLocaleDateString()}</p>
-      <p className="mb-4">Selected Data Type: {dataType}</p>
-
-      {/* Button to fetch predictions */}
-      <button
-        onClick={fetchPredictions}
-        className="px-4 py-2 bg-blue-500 text-white rounded"
-      >
-        Fetch Predictions
-      </button>
-
-      {/* Display loading state */}
-      {loading && <p className="mt-4">Loading predictions...</p>}
-      {error && <p className="mt-4 text-red-500">{error}</p>}
-
-      {/* Conditional rendering of the textbox for coordinates */}
-      {showCoords && coordinates && (
-        <div className="mt-4">
-          <label className="block mb-2 text-lg font-semibold">Coordinates:</label>
-          <input
-            type="text"
-            value={`Latitude: ${coordinates.lat}`} 
-            readOnly
-            className="p-2 border border-gray-300 rounded"
-          />
-          <input
-            type="text"
-            value={`Longitude: ${coordinates.lng}`} 
-            readOnly
-            className="p-2 border border-gray-300 rounded"
-          />
-        </div>
-      )}
-
-      <CSVMap />
-      
+      {/* Toast Notifications */}
+      <ToastContainer />
     </div>
   );
 };
