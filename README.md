@@ -27,8 +27,8 @@ prediction of said data, up to 2 years in the future. With Agricast, local farme
 and select their data of interest, and Agricast will output a map of the GTA with the predicted data for that date, along with suggestions
 on how farmers can prepare their crops.
 
-<img src="content/image2.png" width="100" height="100"/>
-<img src="content/image.png" width="100" height="100"/>
+<img src="content/image2.png" width="600" height="600"/>
+<img src="content/image.png" width="600" height="600"/>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -81,9 +81,7 @@ The machine learning models are available to be downloaded at:
 
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+<img src="content/weatherpred.png" width="600" height="600"/>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
