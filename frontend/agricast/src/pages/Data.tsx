@@ -1,4 +1,4 @@
-// src/App.tsx
+// src/Data.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
@@ -10,7 +10,7 @@ const Data: React.FC = () => {
   const [dataType, setDataType] = useState<string>('temp');
   
   // State variables for additional options (optional)
-  const [epochs, setEpochs] = useState<number>(30);
+  const [epochs, setEpochs] = useState<number>(20);
   const [batchSize, setBatchSize] = useState<number>(32);
   const [learningRate, setLearningRate] = useState<number>(0.001);
   const [overwrite, setOverwrite] = useState<boolean>(false);
@@ -63,6 +63,21 @@ const Data: React.FC = () => {
       if (response.status === 200) {
         setResponseMessage(response.data.message);
         toast.success(response.data.message);
+        const map_resp = await axios.post('http://localhost:5000/get-map', {
+          date: formattedDate,    
+          data_type: dataType,
+        }, {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+        if (map_resp.status === 200) {
+          console.log(map_resp.data);
+          const fileName = `${dataType}_map_${date}.html`; // Update based on your filename format
+          window.open(`/map/${fileName}`, '_blank');
+
+        }
+
       } else {
         toast.error('Unexpected response from the server.');
       }
