@@ -102,9 +102,10 @@ Divjot Bhogal - divjotbhogal@gmail.com
 
 Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
 
-- [Training Data Used](https://choosealicense.com)
+- [Training Data Used](https://drive.google.com/drive/u/1/folders/1LockJfikBB2l-ySRc0j0YGAKsdcQ6giw)
 - [Training Data Source](https://grid.malven.co/)
-- [NASA Space Apps Submission Page](https://www.webpagefx.com/tools/emoji-cheat-sheet)
+- [NASA Space Apps Challenge](https://www.spaceappschallenge.org/nasa-space-apps-2024/challenges/leveraging-earth-observation-data-for-informed-agricultural-decision-making/)
+- [NASA Space Apps Submission Page](https://www.spaceappschallenge.org/nasa-space-apps-2024/find-a-team/yilonma/?tab=project)
 - [Springridge Farm](https://www.springridgefarm.com/)
 - [Readme Template](https://github.com/othneildrew/Best-README-Template)
 
