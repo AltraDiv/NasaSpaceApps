@@ -22,7 +22,7 @@ const Home: React.FC = () => {
         improve their farming practices.
       </p>
 
-      <h1 className="text-4xl font-bold">Agricast</h1>
+      <h1 className="text-4xl font-bold">Introducing Agricast</h1>
 
       <p className="text-lg">
         Agricast utilizes NASA's IMERG and MODIS precipitation, groundwater, and
