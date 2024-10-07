@@ -3,11 +3,18 @@ import React, { useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+=======
+// src/App.tsx
+import React, { useState } from "react";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+>>>>>>> 39e2589ee0c4bb355f0c0fa2f432a2ab6ca33ad5
 
 const Data: React.FC = () => {
   // State variables for form inputs
-  const [date, setDate] = useState<string>('');
-  const [dataType, setDataType] = useState<string>('temp');
+  const [date, setDate] = useState<string>("");
+  const [dataType, setDataType] = useState<string>("temp");
   
   // State variables for additional options (optional)
   const [epochs, setEpochs] = useState<number>(20);
@@ -17,7 +24,7 @@ const Data: React.FC = () => {
   
   // State variables for handling loading and response
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [responseMessage, setResponseMessage] = useState<string>('');
+  const [responseMessage, setResponseMessage] = useState<string>("");
 
   // Handler for form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -29,13 +36,13 @@ const Data: React.FC = () => {
       return;
     }
 
-    if (!['temp', 'rain', 'groundwater'].includes(dataType)) {
-      toast.error('Invalid data type selected.');
+    if (!["temp", "rain", "groundwater"].includes(dataType)) {
+      toast.error("Invalid data type selected.");
       return;
     }
 
     setIsLoading(true);
-    setResponseMessage('');
+    setResponseMessage("");
 
     try {
       // Format date as per backend expectations

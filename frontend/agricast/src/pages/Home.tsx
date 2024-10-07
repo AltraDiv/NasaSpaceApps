@@ -22,15 +22,34 @@ const Home: React.FC = () => {
         improve their farming practices.
       </p>
 
-      <h1 className="text-4xl font-bold">Agricast</h1>
+      <h1 className="text-4xl font-bold">Introducing Agricast</h1>
 
       <p className="text-lg">
-        With Agricast, local farmers in the GTA (Greater Toronto Area) can put
-        in a future date and select temperature, precipitation, and groundwater.
-        Based on NASA satellite data (IMERG, MODIS), Agricast will output a map
-        of the GTA with predicted data for that future date, allowing farmers to
-        prepare and protect their crops well in advance.
+        Agricast utilizes NASA's IMERG and MODIS precipitation, groundwater, and
+        temperature data to train multiple machine learning models that are able
+        to provide a prediction of said data, up to 2 years in the future. With
+        Agricast, local farmers in the GTA (Greater Toronto Area) can put in a
+        future date and select their data of interest, and Agricast will output
+        a map of the GTA with the predicted data for that date, along with
+        suggestions on how farmers can prepare their crops.
       </p>
+
+      <h2 className="text-3xl font-semibold text-center">
+        Local Farmer Interview
+      </h2>
+
+      {/* YouTube Video Embed */}
+      <div className="flex justify-center">
+        <iframe
+          width="560"
+          height="315"
+          src="https://www.youtube.com/embed/3eGCSQ4Qan0"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
     </div>
   );
 };
