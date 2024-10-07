@@ -6,7 +6,7 @@
 <br />
 <div align="center">
 
-  <img src="content/logo.png" alt="Logo" width="80" height="80">
+  <img src="content/logo.png" alt="Logo" width="120" height="120">
   <h1 align="center">Agricast</h1>
 
   <p align="center">
