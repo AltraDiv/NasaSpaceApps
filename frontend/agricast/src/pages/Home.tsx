@@ -33,6 +33,23 @@ const Home: React.FC = () => {
         a map of the GTA with the predicted data for that date, along with
         suggestions on how farmers can prepare their crops.
       </p>
+
+      <h2 className="text-3xl font-semibold text-center">
+        Local Farmer Interview
+      </h2>
+
+      {/* YouTube Video Embed */}
+      <div className="flex justify-center">
+        <iframe
+          width="560"
+          height="315"
+          src="https://youtu.be/3eGCSQ4Qan0"
+          title="YouTube video player"
+          frameBorder="0"
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+          allowFullScreen
+        ></iframe>
+      </div>
     </div>
   );
 };
