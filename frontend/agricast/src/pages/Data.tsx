@@ -1,23 +1,23 @@
 // src/App.tsx
-import React, { useState } from 'react';
-import axios from 'axios';
-import { ToastContainer, toast } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import React, { useState } from "react";
+import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const Data: React.FC = () => {
   // State variables for form inputs
-  const [date, setDate] = useState<string>('');
-  const [dataType, setDataType] = useState<string>('temp');
-  
+  const [date, setDate] = useState<string>("");
+  const [dataType, setDataType] = useState<string>("temp");
+
   // State variables for additional options (optional)
   const [epochs, setEpochs] = useState<number>(30);
   const [batchSize, setBatchSize] = useState<number>(32);
   const [learningRate, setLearningRate] = useState<number>(0.001);
   const [overwrite, setOverwrite] = useState<boolean>(false);
-  
+
   // State variables for handling loading and response
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [responseMessage, setResponseMessage] = useState<string>('');
+  const [responseMessage, setResponseMessage] = useState<string>("");
 
   // Handler for form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -25,26 +25,26 @@ const Data: React.FC = () => {
 
     // Basic validation
     if (!date) {
-      toast.error('Please select a date.');
+      toast.error("Please select a date.");
       return;
     }
 
-    if (!['temp', 'rain', 'groundwater'].includes(dataType)) {
-      toast.error('Invalid data type selected.');
+    if (!["temp", "rain", "groundwater"].includes(dataType)) {
+      toast.error("Invalid data type selected.");
       return;
     }
 
     setIsLoading(true);
-    setResponseMessage('');
+    setResponseMessage("");
 
     try {
       // Format date as per backend expectations
       // Assuming backend expects 'YYYYMMDD'
-      const formattedDate = date.replace(/-/g, '');
+      const formattedDate = date.replace(/-/g, "");
 
       // Prepare the payload
       const payload = {
-        date: formattedDate,    // Formatted date
+        date: formattedDate, // Formatted date
         data_type: dataType,
         epochs: epochs,
         batch_size: batchSize,
@@ -53,27 +53,35 @@ const Data: React.FC = () => {
       };
 
       // Make the POST request to the backend
-      const response = await axios.post('http://localhost:5000/predict', payload, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
+      const response = await axios.post(
+        "http://localhost:5000/predict",
+        payload,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
 
       // Handle success response
       if (response.status === 200) {
         setResponseMessage(response.data.message);
         toast.success(response.data.message);
       } else {
-        toast.error('Unexpected response from the server.');
+        toast.error("Unexpected response from the server.");
       }
     } catch (error: any) {
       // Handle error response
       if (error.response && error.response.data && error.response.data.error) {
         toast.error(`Error: ${error.response.data.error}`);
-      } else if (error.response && error.response.data && error.response.data.message) {
+      } else if (
+        error.response &&
+        error.response.data &&
+        error.response.data.message
+      ) {
         toast.info(`Info: ${error.response.data.message}`);
       } else {
-        toast.error('An error occurred while processing your request.');
+        toast.error("An error occurred while processing your request.");
       }
     } finally {
       setIsLoading(false);
@@ -81,13 +89,18 @@ const Data: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-green-100 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white shadow-lg rounded-lg p-8">
-        <h1 className="text-2xl font-bold mb-6 text-center">Weather Predictor</h1>
+        <h1 className="text-2xl font-bold mb-6 text-center">
+          Water and Weather Predictor
+        </h1>
         <form onSubmit={handleSubmit} className="space-y-6">
           {/* Date Input */}
           <div>
-            <label htmlFor="date" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="date"
+              className="block text-sm font-medium text-gray-700"
+            >
               Date:
             </label>
             <input
@@ -102,7 +115,10 @@ const Data: React.FC = () => {
 
           {/* Data Type Selection */}
           <div>
-            <label htmlFor="dataType" className="block text-sm font-medium text-gray-700">
+            <label
+              htmlFor="dataType"
+              className="block text-sm font-medium text-gray-700"
+            >
               Data Type:
             </label>
             <select
@@ -120,12 +136,17 @@ const Data: React.FC = () => {
 
           {/* Additional Options (Optional) */}
           <fieldset className="border border-gray-300 rounded-md p-4">
-            <legend className="text-sm font-medium text-gray-700">Training Parameters (Optional)</legend>
-            
+            <legend className="text-sm font-medium text-gray-700">
+              Training Parameters (Optional)
+            </legend>
+
             <div className="mt-4 space-y-4">
               {/* Epochs */}
               <div>
-                <label htmlFor="epochs" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="epochs"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Epochs:
                 </label>
                 <input
@@ -140,7 +161,10 @@ const Data: React.FC = () => {
 
               {/* Batch Size */}
               <div>
-                <label htmlFor="batchSize" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="batchSize"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Batch Size:
                 </label>
                 <input
@@ -155,7 +179,10 @@ const Data: React.FC = () => {
 
               {/* Learning Rate */}
               <div>
-                <label htmlFor="learningRate" className="block text-sm font-medium text-gray-700">
+                <label
+                  htmlFor="learningRate"
+                  className="block text-sm font-medium text-gray-700"
+                >
                   Learning Rate:
                 </label>
                 <input
@@ -178,7 +205,10 @@ const Data: React.FC = () => {
                   onChange={(e) => setOverwrite(e.target.checked)}
                   className="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
                 />
-                <label htmlFor="overwrite" className="ml-2 block text-sm text-gray-700">
+                <label
+                  htmlFor="overwrite"
+                  className="ml-2 block text-sm text-gray-700"
+                >
                   Overwrite Existing Model
                 </label>
               </div>
@@ -190,10 +220,12 @@ const Data: React.FC = () => {
             type="submit"
             disabled={isLoading}
             className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-              isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+              isLoading
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-blue-600 hover:bg-blue-700"
             } focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500`}
           >
-            {isLoading ? 'Processing...' : 'Predict'}
+            {isLoading ? "Processing..." : "Predict"}
           </button>
         </form>
 
