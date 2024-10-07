@@ -30,6 +30,7 @@ and select their data of interest, and Agricast will output a map of the GTA wit
 on how farmers can prepare their crops.
 
 <img src="content/Capture.PNG" width="900" height="600"/>
+<img src="content/Capture4.PNG" width="900" height="600"/>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -89,6 +90,11 @@ The machine learning models are available to be downloaded at:
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
+### How to use
+
+Once you go on the predict tab, you select your date you want to use from April - November. You then specify the data_type you want to see (e.g precipation, temperature, etc). There are optional values on how thorough you want Pytorch to train using the epoch size or batch sizes. 
+We have a learning rate of 0.001. You can then click predict and then after the AI finishes the forward and backwards passes; calculating MSE (loss) it will finish the model and then output a csv file of all the predicted values of the data_type at the cordinates around GTA. You will then be
+redirected to the map .html file that shows the prediction. You are then able to see each data_type value at each cordinate. This will help farmers know exactly at their location what the crops will go through of weather. 
 
 <!-- USAGE EXAMPLES -->
 
@@ -97,6 +103,7 @@ The machine learning models are available to be downloaded at:
 For the future we definetly want to have larger datasets, more data and implement in our app warnings to farmers about over irrigation, or meldew warning or letting farmers know when to water higher or lower incase of inticipating future weather.
 It will also help them know what kind of crops to grow for the future, for example by Farmer John, pumpkins grow larger with a lot of water. Thus larger precipation will be benificial for pumpkins meanwhile not good for strawberries because of meldew.
 
+  We'd also love to improve our final map (making a legend and adding more colour gradients; sadly just limited on time. 
 ## Usage
 
 <img src="content/weatherpred.png" width="600" height="600"/>
