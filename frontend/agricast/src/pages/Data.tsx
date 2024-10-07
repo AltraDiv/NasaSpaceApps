@@ -1,16 +1,8 @@
-<<<<<<< HEAD
 // src/Data.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-=======
-// src/App.tsx
-import React, { useState } from "react";
-import axios from "axios";
-import { ToastContainer, toast } from "react-toastify";
-import "react-toastify/dist/ReactToastify.css";
->>>>>>> 39e2589ee0c4bb355f0c0fa2f432a2ab6ca33ad5
 
 const Data: React.FC = () => {
   // State variables for form inputs
