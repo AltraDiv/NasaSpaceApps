@@ -10,7 +10,8 @@
 
   <p align="center">
     A tool to assist local farmers in the GTA by predicting precipitation, temperature, and ground water levels.
-    Created for Nasa Space Apps 2024 Hackathon.
+    <br />
+    Created for Nasa Space Apps 2024.
     <br />
     <br />
     <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
