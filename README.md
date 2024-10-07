@@ -98,6 +98,7 @@ redirected to the map .html file that shows the prediction. You are then able to
   For the future we definetly want to have larger datasets, more data and implement in our app warnings to farmers about over irrigation, or meldew warning or letting farmers know when to water higher or lower incase of inticipating future weather.
   It will also help them know what kind of crops to grow for the future, for example by Farmer John, pumpkins grow larger with a lot of water. Thus larger precipation will be benificial for pumpkins meanwhile not good for strawberries because of meldew.
 
+  We'd also love to improve our final map (making a legend and adding more colour gradients; sadly just limited on time. 
 ## Usage
 
 <img src="content/weatherpred.png" width="600" height="600"/>
