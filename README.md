@@ -27,6 +27,7 @@ prediction of said data, up to 2 years in the future. With Agricast, local farme
 and select their data of interest, and Agricast will output a map of the GTA with the predicted data for that date, along with suggestions
 on how farmers can prepare their crops.
 
+<img src="content/Capture.png" width="600" height="600"/>
 <img src="content/image2.png" width="600" height="600"/>
 <img src="content/image.png" width="600" height="600"/>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
