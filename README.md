@@ -20,8 +20,6 @@
 
 ## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
-
 Agricast utilizes NASA's IMERG and MODIS precipitation, groundwater, and temperature data to train multiple machine learning models that are able to provide a
 prediction of said data, up to 2 years in the future. With Agricast, local farmers in the GTA (Greater Toronto Area) can put in a future date
 and select their data of interest, and Agricast will output a map of the GTA with the predicted data for that date, along with suggestions
