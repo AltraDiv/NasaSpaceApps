@@ -6,6 +6,7 @@
 <br />
 <div align="center">
 
+  <img src="content/logo.png" alt="Logo" width="80" height="80">
   <h1 align="center">Agricast</h1>
 
   <p align="center">
@@ -20,6 +21,7 @@
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
+
 Link to Interview with Farmer John: https://www.youtube.com/embed/3eGCSQ4Qan0 </br>
 Link to Demo: https://www.youtube.com/watch?v=jNpdOtujTbo </br>
 Agricast utilizes NASA's IMERG and MODIS precipitation, groundwater, and temperature data to train multiple machine learning models that are able to provide a
@@ -33,11 +35,12 @@ on how farmers can prepare their crops.
 
 ## AI TRAINING
 
-  Our Application takes the datasets from NASA about precipation, temperature and groundwater. It takes the Months from April-November (Summer/Fall/Spring) in 2023 and trains the model using epoch size of 20 and the cordinates around Toronto (GTA).
-  The application then predicts the given date (e.g 20250901, September 1st 2025) and uses the model to predict the data type that you input (Temperature, Predcipation, Groundwater). We had plans for then using the prediction to inform farmers about
-  meldew warning or irrgation warning to lower costs and prevents crop contamination. We also wanted preciser datasets and largers however the datasets were 6gb for just 6 months and we did not have time to go through the datasets and sort them out ourselves.
+Our Application takes the datasets from NASA about precipation, temperature and groundwater. It takes the Months from April-November (Summer/Fall/Spring) in 2023 and trains the model using epoch size of 20 and the cordinates around Toronto (GTA).
+The application then predicts the given date (e.g 20250901, September 1st 2025) and uses the model to predict the data type that you input (Temperature, Predcipation, Groundwater). We had plans for then using the prediction to inform farmers about
+meldew warning or irrgation warning to lower costs and prevents crop contamination. We also wanted preciser datasets and largers however the datasets were 6gb for just 6 months and we did not have time to go through the datasets and sort them out ourselves.
 
-  If we had more time and much larger resources and space, we would be able to expand this project into one that would be able to help farmers like Farmer John.
+If we had more time and much larger resources and space, we would be able to expand this project into one that would be able to help farmers like Farmer John.
+
 ### Built With
 
 <img src="content/image2.png" width="600" height="600"/>
@@ -55,11 +58,11 @@ on how farmers can prepare their crops.
 
 ## Getting Started
 
-We have to note you can't run the code on your local computer simply because the datasets were to huge to input into github as well as the .csv files. You can view the rain dataset on google drive and some .csv file examples. 
+We have to note you can't run the code on your local computer simply because the datasets were to huge to input into github as well as the .csv files. You can view the rain dataset on google drive and some .csv file examples.
 You can however clone the project and see everything else!
 (The datasets were around 6gb for just ~6 months)
-### Prerequisites
 
+### Prerequisites
 
 ### Installation
 
@@ -88,9 +91,11 @@ The machine learning models are available to be downloaded at:
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
+
 ## For the Future
-  For the future we definetly want to have larger datasets, more data and implement in our app warnings to farmers about over irrigation, or meldew warning or letting farmers know when to water higher or lower incase of inticipating future weather.
-  It will also help them know what kind of crops to grow for the future, for example by Farmer John, pumpkins grow larger with a lot of water. Thus larger precipation will be benificial for pumpkins meanwhile not good for strawberries because of meldew.
+
+For the future we definetly want to have larger datasets, more data and implement in our app warnings to farmers about over irrigation, or meldew warning or letting farmers know when to water higher or lower incase of inticipating future weather.
+It will also help them know what kind of crops to grow for the future, for example by Farmer John, pumpkins grow larger with a lot of water. Thus larger precipation will be benificial for pumpkins meanwhile not good for strawberries because of meldew.
 
 ## Usage
 
@@ -120,7 +125,7 @@ Use this space to list resources you find helpful and would like to give credit 
 - [NASA Space Apps Submission Page](https://www.spaceappschallenge.org/nasa-space-apps-2024/find-a-team/yilonma/?tab=project)
 - [Springridge Farm](https://www.springridgefarm.com/)
 - [Readme Template](https://github.com/othneildrew/Best-README-Template)
-  
+
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- MARKDOWN LINKS & IMAGES -->
