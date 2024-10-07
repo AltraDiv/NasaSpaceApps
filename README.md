@@ -14,25 +14,33 @@
     Created for Nasa Space Apps 2024.
     <br />
     <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
   </p>
 </div>
 
 <!-- ABOUT THE PROJECT -->
 
 ## About The Project
-
+Link to Interview with Farmer John: https://www.youtube.com/embed/3eGCSQ4Qan0 </br>
 Agricast utilizes NASA's IMERG and MODIS precipitation, groundwater, and temperature data to train multiple machine learning models that are able to provide a
 prediction of said data, up to 2 years in the future. With Agricast, local farmers in the GTA (Greater Toronto Area) can put in a future date
 and select their data of interest, and Agricast will output a map of the GTA with the predicted data for that date, along with suggestions
 on how farmers can prepare their crops.
 
-<img src="content/image2.png" width="100" height="100"/>
-<img src="content/image.png" width="100" height="100"/>
+<img src="content/Capture.PNG" width="900" height="600"/>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
+## AI TRAINING
+
+  Our Application takes the datasets from NASA about precipation, temperature and groundwater. It takes the Months from April-November (Summer/Fall/Spring) in 2023 and trains the model using epoch size of 20 and the cordinates around Toronto (GTA).
+  The application then predicts the given date (e.g 20250901, September 1st 2025) and uses the model to predict the data type that you input (Temperature, Predcipation, Groundwater). We had plans for then using the prediction to inform farmers about
+  meldew warning or irrgation warning to lower costs and prevents crop contamination. We also wanted preciser datasets and largers however the datasets were 6gb for just 6 months and we did not have time to go through the datasets and sort them out ourselves.
+
+  If we had more time and much larger resources and space, we would be able to expand this project into one that would be able to help farmers like Farmer John.
 ### Built With
+
+<img src="content/image2.png" width="600" height="600"/>
+<img src="content/image.png" width="600" height="600"/>
 
 - [![React][React.js]][React-url]
 - [![Vite][Vite-logo]][Vite-url]
@@ -46,17 +54,11 @@ on how farmers can prepare their crops.
 
 ## Getting Started
 
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
+We have to note you can't run the code on your local computer simply because the datasets were to huge to input into github as well as the .csv files. You can view the rain dataset on google drive and some .csv file examples. 
+You can however clone the project and see everything else!
+(The datasets were around 6gb for just ~6 months)
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-
-- npm
-  ```sh
-  npm install npm@latest -g
-  ```
 
 ### Installation
 
@@ -71,19 +73,28 @@ The machine learning models are available to be downloaded at:
    npm install
    ```
 3. Start Server
+   Backend:
    ```sh
-   npm run start
+   cd backend
+   python app.py
+   ```
+   Frontend:
+   ```sh
+   cd frontend/agricast
+   npm run dev
    ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
+## For the Future
+  For the future we definetly want to have larger datasets, more data and implement in our app warnings to farmers about over irrigation, or meldew warning or letting farmers know when to water higher or lower incase of inticipating future weather.
+  It will also help them know what kind of crops to grow for the future, for example by Farmer John, pumpkins grow larger with a lot of water. Thus larger precipation will be benificial for pumpkins meanwhile not good for strawberries because of meldew.
 
 ## Usage
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
+<img src="content/weatherpred.png" width="600" height="600"/>
+<img src="content/Capture2.PNG" width="600" height="600"/>
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
