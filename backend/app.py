@@ -2,7 +2,7 @@ import os
 import numpy as np
 import pandas as pd
 from datetime import datetime, timedelta
-from flask import Flask, request, jsonify, send_file
+from flask import Flask, request, jsonify, send_file, send_from_directory
 from flask_cors import CORS
 from pyhdf.SD import SD, SDC
 import netCDF4 as nc
@@ -13,6 +13,7 @@ import torch.nn as nn
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from geopy.distance import geodesic  # Optional for precise distance filtering
+import folium
 
 app = Flask(__name__)
 CORS(app)  # Enable CORS for all routes
@@ -64,10 +65,10 @@ def predict():
     data = request.json
     date_input = data.get('date')  # e.g., "2023091"
     data_type = data.get('data_type')  # e.g., "temp", "rain", "groundwater"
-    epochs = data.get('epochs', 30)  # Default to 10 epochs if not provided
+    epochs = data.get('epochs', 20)  # Default to 10 epochs if not provided
     batch_size = data.get('batch_size', 32)  # Default batch size
     learning_rate = data.get('learning_rate', 0.001)  # Default learning rate
-    overwrite = data.get('overwrite', True)  # Whether to overwrite existing model
+    overwrite = data.get('overwrite', False)  # Whether to overwrite existing model
 
     # Format date_input
     date_input = f"2023{date_input[4:]}" 
@@ -337,7 +338,7 @@ def predict():
 
             for i in range(nrows_2025):
                 for j in range(ncols_2025):
-                    lats_2025[i, j] = modis_sinusoidal_to_lat(v, i)
+                    lats_2025[i, j] = -1 * modis_sinusoidal_to_lat(v, i)
                     lons_2025[i, j] = modis_sinusoidal_to_lon(h, j)
             print(lats_2025[0,0])
             print(lons_2025[0,0])
@@ -399,7 +400,7 @@ def predict():
                 for layer in range(n_layers_2025):
                     for i in range(nrows_gw_2025):
                         for j in range(ncols_gw_2025):
-                            gw_lats_2025[layer, i, j] = modis_sinusoidal_to_lat(v, i)
+                            gw_lats_2025[layer, i, j] = -1 * modis_sinusoidal_to_lat(v, i)
                             gw_lons_2025[layer, i, j] = modis_sinusoidal_to_lon(h, j)
 
                 gw_lat_flat_2025 = gw_lats_2025.flatten()
@@ -459,6 +460,122 @@ def predict():
     print(f"Saved 2025 predictions to {predictions_file_2025}.")
 
     return jsonify({"message": f"Model trained and saved to {model_path}. Predictions for 2025 saved to {predictions_file_2025}."}), 200
+
+
+def generate_map(date, data_type):
+    # Load the CSV file
+    date = date.replace("-", "")  # Removes all dashes
+    csv_file = f'./predictions/predictions_{data_type}_{date}.csv'  # Path to your CSV file
+    print(csv_file)
+
+    try:
+        data = pd.read_csv(csv_file)
+        print("File read successfully.")
+    except FileNotFoundError:
+        return jsonify(error='CSV file not found'), 404
+    except Exception as e:
+        return jsonify(error=f'Error reading CSV: {str(e)}'), 500
+
+    print("Mean Latitude:", data['Latitude'].mean())
+
+    try:
+        map_center = [data['Latitude'].mean(), data['Longitude'].mean()]
+        map_instance = folium.Map(location=map_center, zoom_start=6)
+
+        def get_color(value, data_type):
+            if data_type == "rain":
+                if value > 20:
+                    return 'blue'
+                elif value > 10:
+                    return 'green'
+                else:
+                    return 'red'
+            elif data_type == "temp":
+                if value > 3200:
+                    return 'red'
+                elif value > 4000:
+                    return 'orange'
+                else:
+                    return 'blue'
+            return 'gray'  # Default color
+
+        if data_type == "rain":
+            for index, row in data.iterrows():
+                popup_content = f"Latitude: {row['Latitude']}<br>Longitude: {row['Longitude']}<br>Precipitation: {row['Precipitation']} mm"
+                folium.CircleMarker(
+                    location=[row['Latitude'], row['Longitude']],
+                    radius=5 + row['Precipitation'] * 0.2,
+                    color=get_color(row['Precipitation'], "rain"),
+                    fill=True,
+                    fill_opacity=0.7,
+                    popup=folium.Popup(popup_content, parse_html=True)
+                ).add_to(map_instance)
+        elif data_type == "temp":
+            for index, row in data.iterrows():
+                popup_content = (f"Latitude: {row['Latitude']}<br>"
+                                 f"Longitude: {row['Longitude']}<br>"
+                                 f"Temperature: {row['Temperature']} °C<br>")
+                standard_radius = 8  # Standard radius for all markers
+                folium.CircleMarker(
+                    location=[row['Latitude'], row['Longitude']],
+                    radius=standard_radius,
+                    color=get_color(row['Temperature'], "temp"),
+                    fill=True,
+                    fill_opacity=0.7,
+                    popup=folium.Popup(popup_content, parse_html=True)
+                ).add_to(map_instance)
+
+        print("Finished adding markers to the map.")
+
+        # Ensure the directory exists
+        map_directory = './map'
+        if not os.path.exists(map_directory):
+            os.makedirs(map_directory)
+            print("Created the map directory.")
+        else:
+            print("Map directory already exists.")
+
+        try:
+            # Save the map to an HTML file
+            map_file_path = f'{map_directory}/{data_type}_map_{date}.html'  # Use date in filename
+            map_instance.save(map_file_path)
+            print("Map has been saved at:", map_file_path)
+        except Exception as save_error:
+            print(f"Error saving the map: {save_error}")
+            return jsonify(error=f'Error saving map: {str(save_error)}'), 500
+
+    except Exception as e:
+        print(f"An error occurred while generating the map: {str(e)}")
+        return jsonify(error=str(e)), 500
+
+@app.route('/get-map', methods=['POST'])
+def get_map():
+
+    # Serve the map file as a response
+    data = request.json
+    date = data.get('date')
+    data_input = data.get('data_type')
+    print("Received request to generate map with data:", data)  # Debugging line
+    try:
+        generate_map(date, data_input)
+        print("Map generated successfully.")  # Debugging line
+    except Exception as e:
+        print(f"Error during map generation: {str(e)}")  # Debugging line
+        return jsonify(error='Map generation failed'), 500
+
+    map_file_path = f'./map/{data_input}_map_{date}.html'
+    print(f"Checking for map file at: {map_file_path}")  # Debugging line
+    if os.path.exists(map_file_path):
+        print("Map file exists, returning URL.")  # Debugging line
+        return jsonify(mapUrl=map_file_path)
+    else:
+        print("Map file not found.")  # Debugging line
+        return jsonify(error='Map not found'), 404
+
+@app.route('/map/<path:filename>')
+def serve_map(filename):
+    return send_from_directory('map', f'./map/{filename}')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
