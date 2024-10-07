@@ -27,7 +27,8 @@ prediction of said data, up to 2 years in the future. With Agricast, local farme
 and select their data of interest, and Agricast will output a map of the GTA with the predicted data for that date, along with suggestions
 on how farmers can prepare their crops.
 
-<img src="content/Capture.PNG" width="600" height="600"/>
+<img src="content/Capture.PNG" width="900" height="600"/>
+<img src="content/Capture2.PNG" width="600" height="600"/>
 <img src="content/image2.png" width="600" height="600"/>
 <img src="content/image.png" width="600" height="600"/>
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
@@ -86,6 +87,9 @@ The machine learning models are available to be downloaded at:
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 <!-- USAGE EXAMPLES -->
+## For the Future
+  For the future we definetly want to have larger datasets, more data and implement in our app warnings to farmers about over irrigation, or meldew warning or letting farmers know when to water higher or lower incase of inticipating future weather.
+  It will also help them know what kind of crops to grow for the future, for example by Farmer John, pumpkins grow larger with a lot of water. Thus larger precipation will be benificial for pumpkins meanwhile not good for strawberries because of meldew.
 
 ## Usage
 
